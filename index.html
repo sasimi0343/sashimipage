@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>さしみ。</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+
+        <div class="linkmenu">
+            <a href="index.html" style="grid-column: 1 / 2;" class="current">
+                Profile
+            </a>
+            <a href="accounts.html" style="grid-column: 2 / 3;">
+                Accounts
+            </a>
+            <a href="discord.html" style="grid-column: 3 / 4;">
+                Discord
+            </a>
+            <a href="works.html" style="grid-column: 4 / 5;">
+                Works
+            </a>
+        </div>
+
+        <div>
+            
+            <img src="icon.png" class="transion_rotate maincontent iconblur" style="display: inline; animation-delay: 0.1s; right: -300px; scale: 0.21; top: calc(9% - 250px); filter: blur(100px);">
+            <img src="icon.png" class="transion_rotate maincontent" style="display: inline; animation-delay: 0.1s; right: -300px; scale: 0.2; top: calc(9% - 250px);">
+            <div class="transion_main maincontent" style="display: inline; font-size: 2em;">さしみ。</div>
+            <div class="transion_main maincontent" style="display: inline; animation-delay: 0.1s; top: calc(9% + 250px);" id="birthday">誕生日: 2007年10月31日</div>
+            <div class="transion_main maincontent" style="display: inline; animation-delay: 0.2s; top: calc(9% + 300px);">趣味でゆっくり実況、 作曲、 映像、 プログラミングをしています。</div>
+            <div class="transion_main maincontent" style="display: inline; animation-delay: 0.3s; top: calc(9% + 350px); font-size: 1em;">アイコンは自作です。 スクショとか紹介とかでなら使っても問題はないです。</div>
+            <div class="transion_main maincontent" style="display: inline; animation-delay: 0.4s; top: calc(9% + 400px); font-size: 1em;">一次創作中です。 二次創作も大歓迎です。<a>詳細</a></div>
+            
+        </div>
+
+        <div class="topmenu">
+            <span style="font-size: 2em;" >さしみ。</span>
+        </div>
+
+<script>
+    var date = new Date();
+    if (date.getMonth()+1 == 10) {
+        if (date.getDate() == 31) document.getElementById("birthday").innerHTML += " (今日！)"; else {
+            document.getElementById("birthday").innerHTML += " (あと" + (31-date.getDate()) + "日！)";
+        }
+    }
+</script>
+    </body>
+</html>
