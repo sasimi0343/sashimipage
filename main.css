@@ -197,3 +197,11 @@ a:has(.thumbnail) {
     transform: translateX(-80px) rotateZ(-45deg) translateY(10px);
 }
 
+@media (max-device-width: 700px) {
+    .mobile1 {
+        top: calc(9% + 400px) !important;
+    }
+    .mobile2 {
+        top: calc(9% + 480px) !important;
+    }
+}

@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <title>さしみ。</title>
+        <style>
+            form {
+                border: 1px solid gray;
+            }
+            .selected {
+                background-color: rgb(150, 0, 0);
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <form name="BC">
+            BPM計算<br>
+            BPM <input name="BPM1" value="120" placeholder="BPM" oninput="updateBC();"> の<input name="NBunbo1" placeholder="n" value="4" oninput="updateBC();">分の<input name="NBunsi1" placeholder="m" value="1" oninput="updateBC();">音符 * HS <input name="HS1" value="1" placeholder="HS" oninput="updateBC();"> =<br>
+            BPM <input name="BPM2" value="120" placeholder="BPM" oninput="selectionBC = 0; updateBC();"> の<input name="NBunbo2" placeholder="n" value="4" oninput="selectionBC = 1; updateBC();">分の<input name="NBunsi2" placeholder="m" value="1" oninput="selectionBC = 1; updateBC();">音符 * HS <input name="HS2" value="1" placeholder="HS" oninput="selectionBC = 2; updateBC();">
+        </form>
+        <script>
+            var selectionBC = 0; // (0: BPM固定、 1: 音符間隔固定、 2: HS固定)
+            function GetScroll(bpm1, bpm2, scroll1) {
+                return scroll1 * (bpm1 / bpm2)
+            }
+            function GetNoteLengthBunbo(bpm1, bpm2, bunbo1, bunsi1) {
+                return (bpm1 / bpm2) * bunbo1 / bunsi1
+            }
+            function GetBPM(bpm1, bunbo1, bunsi1, bunbo2, bunsi2) {
+                return bpm1 / (bunsi1 / bunbo1 / bunsi2 * bunbo2)
+            }
+            function updateBC() {
+                function getvalue(a) { return document.BC[a].value}
+                switch (selectionBC) {
+                    case 0:
+                        document.BC.BPM2.setAttribute("class", "selected");
+                        document.BC.HS2.setAttribute("class", "");
+                        document.BC.NBunbo2.setAttribute("class", "");
+                        document.BC.NBunsi2.setAttribute("class", "");
+
+                        document.BC.HS2.value = GetScroll(getvalue("BPM1"), getvalue("BPM2"), getvalue("HS1"));
+                        document.BC.NBunbo2.value = GetNoteLengthBunbo(getvalue("BPM1"), getvalue("BPM2"), getvalue("NBunbo1"), getvalue("NBunsi1"));
+                        document.BC.NBunsi2.value = 1;
+                        break;
+                    case 1:
+                        document.BC.BPM2.setAttribute("class", "");
+                        document.BC.HS2.setAttribute("class", "");
+                        document.BC.NBunbo2.setAttribute("class", "selected");
+                        document.BC.NBunsi2.setAttribute("class", "selected");
+
+                        document.BC.BPM2.value = GetBPM(getvalue("BPM1"), getvalue("NBunbo1"), getvalue("NBunsi1"), getvalue("NBunbo2"), getvalue("NBunsi2"));
+                        document.BC.HS2.value = GetScroll(getvalue("BPM1"), getvalue("BPM2"), getvalue("HS1"));
+                        break;
+                    case 2:
+                        document.BC.BPM2.setAttribute("class", "");
+                        document.BC.HS2.setAttribute("class", "selected");
+                        document.BC.NBunbo2.setAttribute("class", "");
+                        document.BC.NBunsi2.setAttribute("class", "");
+
+                        document.BC.BPM2.value = GetBPM(getvalue("BPM1"), getvalue("NBunbo1"), getvalue("NBunsi1"), getvalue("NBunbo2"), getvalue("NBunsi2"));
+                        document.BC.NBunbo2.value = GetNoteLengthBunbo(getvalue("BPM1"), getvalue("BPM2"), getvalue("NBunbo1"), getvalue("NBunsi1"));
+                        document.BC.NBunsi2.value = 1;
+                        break;
+                }
+            }
+            updateBC();
+        </script>
+    </body>
+</html>
