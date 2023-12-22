@@ -31,7 +31,7 @@ body {
     width: 50%;
     left: 25%;
     height: 100px;
-    opacity: 0.1;
+    opacity: 0.3;
     transition-duration: 0.3s;
     transition-timing-function: cubic-bezier(1, 0, 0, 1);
     transform: translateY(-70px);
@@ -203,5 +203,21 @@ a:has(.thumbnail) {
     }
     .mobile2 {
         top: calc(9% + 480px) !important;
+    }
+    .mobile3 {
+        top: calc(9% + 500px) !important;
+    }
+    .mobile4 {
+        top: calc(9% + 600px) !important;
+    }
+    .mobile5 {
+        top: calc(9% + 700px) !important;
+    }
+    .mobile6 {
+        top: calc(9% + 800px) !important;
+    }
+    .linkmenu {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
