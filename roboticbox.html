@@ -1,0 +1,64 @@
+<html>
+    <head>
+        <title>さしみ。</title>
+        <link rel="stylesheet" href="main.css">
+        <link rel="icon" type="image/png" href="icon_32px.png" sizes="32x32">
+        <style>
+            .roboticbox_container * {
+                font-family: 'PixelMplus10' !important;
+            }
+            body {
+                scroll-timeline: --page-scroll block;
+            }
+            @keyframes grow-progress {
+            	from { filter: blur(0); transform: translateY(0px); }
+            	to { filter: blur(20px); transform: translateY(300px); }
+            }
+
+            @keyframes transionA {
+                from { transform: translateX(-100px) translateY(0px); opacity: 0; }
+                25% { transform: translateX(-100px) translateY(0px); opacity: 0; }
+                70% { transform: translateX(0) translateY(100px); opacity: 1; }
+                to { transform: translateY(200px);}
+            }
+
+            .mainimage {
+            	animation: grow-progress auto linear;
+            	animation-timeline: --page-scroll;
+            }
+        </style>
+    </head>
+    <body style="height: 200%;">
+
+        <div class="linkmenu">
+            <a href="index.html" style="grid-column: 1 / 2;">
+                Profile
+            </a>
+            <a href="accounts.html" style="grid-column: 2 / 3;">
+                Accounts
+            </a>
+            <a href="discord.html" style="grid-column: 3 / 4;">
+                Discord
+            </a>
+            <a href="works.html" style="grid-column: 4 / 5;">
+                Works
+            </a>
+        </div>
+
+        <div class="roboticbox_container">
+            <div class="transion_main maincontent" style="display: inline; font-size: 2em; width: 80%;"><img src="./roboticbox/logo.png" class="mainimage" style="aspect-ratio: 186 / 32; image-rendering: pixelated;"></div>
+            <div class="transion_main maincontent" style="display: inline; animation-delay: 0.1s; top: calc(9% + 400px);">
+                Pictures
+            </div>
+
+            <div class="transion_main maincontent" style="display: inline; animation: transionA auto linear; animation-timeline: --page-scroll; top: calc(9% + 600px);">
+                <img src="./roboticbox/IMG_0577.jpg" style="aspect-ratio: 352 / 198; width: 640px;">
+            </div>
+            
+        </div>
+
+        <div class="topmenu">
+            <span style="font-size: 2em;" >さしみ。</span>
+        </div>
+    </body>
+</html>

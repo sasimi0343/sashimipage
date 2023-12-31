@@ -3,6 +3,7 @@
         <title>さしみ。</title>
         <link rel="stylesheet" href="main.css">
         <link rel="icon" type="image/png" href="icon_32px.png" sizes="32x32">
+        <script src="parser.js"></script>
     </head>
     <body>
 
@@ -30,6 +31,7 @@
             <div class="transion_main maincontent" style="display: inline; animation-delay: 0.2s; top: calc(9% + 300px);">趣味でゆっくり実況、 作曲、 映像、 プログラミングをしています。</div>
             <div class="transion_main maincontent mobile1" style="display: inline; animation-delay: 0.3s; top: calc(9% + 350px); font-size: 1em;">アイコンは自作です。 スクショとか紹介とかでなら使っても問題はないです。</div>
             <div class="transion_main maincontent mobile2" style="display: inline; animation-delay: 0.4s; top: calc(9% + 400px); font-size: 1em;">一次創作中です。 二次創作も大歓迎です。<a style="font-size: 1em;" href="nizisousaku.html">詳細</a></div>
+            <div class="transion_main maincontent mobile1" style="display: inline; animation-delay: 0.5s; top: calc(9% + 500px); font-size: 1em; opacity: 0.2%;">このページでkaniと入力してみろ</div>
             
         </div>
 
@@ -42,6 +44,122 @@
     if (date.getMonth()+1 == 10) {
         if (date.getDate() == 31) document.getElementById("birthday").innerHTML += " (今日！)"; else {
             document.getElementById("birthday").innerHTML += " (あと" + (31-date.getDate()) + "日！)";
+        }
+    }
+
+    var mozi = "";
+    const mozi_seikai = "kani";
+    const answerA = "00114001110009800111001160010500099000980011100120";
+    window.onkeypress = (a) => {
+        mozi += a.key;
+        if (!mozi_seikai.startsWith(mozi)) {
+            mozi = "";
+        }
+        if (mozi == mozi_seikai) {
+            var kani = prompt("蟹");
+            if (kani == null) alert("合言葉を自分で考えてきな")
+            //そこのソースコードを見ているお前！
+            //答えをカンニングしようとしているのはバレバレだ！
+            /*
+            こうやってコメントいっぱい書いて見づらくしてやるもんねー！
+
+
+            北海道はでっかいどう
+
+
+
+
+
+
+虚無
+
+
+
+
+
+
+
+
+
+   _____          _____ _    _ _____ __  __ _____ 
+  / ____|  /\    / ____| |  | |_   _|  \/  |_   _|
+ | (___   /  \  | (___ | |__| | | | | \  / | | |  
+  \___ \ / /\ \  \___ \|  __  | | | | |\/| | | |  
+  ____) / ____ \ ____) | |  | |_| |_| |  | |_| |_ 
+ |_____/_/    \_\_____/|_|  |_|_____|_|  |_|_____| (突然の自己主張)
+
+ ___________________ 
+/ 好きな言語発表ドラゴンが好きな言語 \
+\ 発表します。            /
+ ------------------- 
+      \                    / \  //\
+       \    |\___/|      /   \//  \\
+            /0  0  \__  /    //  | \ \    
+           /     /  \/_/    //   |  \  \  
+           @_^_@'/   \/_   //    |   \   \ 
+           //_^_/     \/_ //     |    \    \
+        ( //) |        \///      |     \     \
+      ( / /) _|_ /   )  //       |      \     _\
+    ( // /) '/,_ _ _/  ( ; -.    |    _ _\.-~        .-~~~^-.
+  (( / / )) ,-{        _      `-.|.-~-.           .~         `.
+ (( // / ))  '/\      /                 ~-. _ .-~      .-~^-.  \
+ (( /// ))      `.   {            }                   /      \  \
+  (( / ))     .----~-.\        \-'                 .~         \  `. \^-.
+             ///.----..>        \             _ -~             `.  ^-`  ^-_
+               ///-._ _ _ _ _ _ _}^ - - - - ~                     ~-- ,.-~
+                                                                  /.-~
+
+
+ ____ 
+< C# >
+ ---- 
+      \                    / \  //\
+       \    |\___/|      /   \//  \\
+            /0  0  \__  /    //  | \ \    
+           /     /  \/_/    //   |  \  \  
+           @_^_@'/   \/_   //    |   \   \ 
+           //_^_/     \/_ //     |    \    \
+        ( //) |        \///      |     \     \
+      ( / /) _|_ /   )  //       |      \     _\
+    ( // /) '/,_ _ _/  ( ; -.    |    _ _\.-~        .-~~~^-.
+  (( / / )) ,-{        _      `-.|.-~-.           .~         `.
+ (( // / ))  '/\      /                 ~-. _ .-~      .-~^-.  \
+ (( /// ))      `.   {            }                   /      \  \
+  (( / ))     .----~-.\        \-'                 .~         \  `. \^-.
+             ///.----..>        \             _ -~             `.  ^-`  ^-_
+               ///-._ _ _ _ _ _ _}^ - - - - ~                     ~-- ,.-~
+                                                                  /.-~
+
+
+なにこのノリ
+
+
+
+
+
+
+
+
+
+はっはっは！こんなこともあろうかと答えを暗号化しておいたのさ！
+answerAを見てみたとしても何も得られん！
+            */
+            else if (parseA(kani.toLowerCase()) == answerA) {
+                alert("本当にありがとう。マジで");
+                alert("こういう場面で" + decode(answerA) + "の事考えてくれるのには感謝しかないです。");
+                alert("そんなあなたにはちょっと特別な場所に連れてあげます。");
+                open(decode(answerA) + ".html", "_self");
+            }else{
+                switch(kani) {
+                    case "calculator":
+                        open("calculator.html");
+                        break;
+                    default:
+                        alert("合言葉が違う！！！！！");
+                        break;
+                }
+            }
+            mozi = "";
         }
     }
 </script>

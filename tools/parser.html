@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Parser</title>
+        <script src="../parser.js"></script>
+    </head>
+    <body>
+        <form name="BC">
+            Parser<br>
+            <input type="text" name="txt" oninput="updateBC()">
+            <input type="text" name="txt2" readonly>
+        </form>
+        <script>
+            function updateBC() {
+                //console.log(document.BC.txt);
+                document.BC.txt2.value = parseA(document.BC.txt.value);
+            }
+            updateBC();
+        </script>
+    </body>
+</html>

@@ -131,6 +131,10 @@ a {
     color: cyan;
 }
 
+a:hover {
+    color: rgb(150, 100, 255);
+}
+
 .maincontent a {
     font-size: 0.5em;
 }
@@ -168,6 +172,7 @@ a:has(.thumbnail) {
     transition-duration: 0.3s;
     transition-timing-function: cubic-bezier(0, 0.5, 0, 1);
     overflow: hidden;
+    text-decoration: none;
 }
 
 .thumbnail_panel:has(a:hover) a:not(:hover) {
@@ -197,6 +202,40 @@ a:has(.thumbnail) {
     transform: translateX(-80px) rotateZ(-45deg) translateY(10px);
 }
 
+.thumbnail_description {
+    position: relative;
+    color: white;
+    background-color: rgba(30, 60, 100, 0.4);
+    opacity: 0;
+    width: 192px;
+    height: 78px;
+    margin: 0px;
+    padding: 0px;
+    display: block;
+    font-size: 0.2em;
+    font-family: Arial, Helvetica, sans-serif;
+    top: -140px;
+    left: 2px;
+    text-align: left;
+    word-spacing: 5px;
+    transition-duration: 0.5s;
+    transition-timing-function: cubic-bezier(0, 0.5, 0, 1);
+    transform: translateY(50px);
+    overflow: hidden;
+    filter: blur(10px);
+    text-decoration: none;
+}
+
+a:has(.thumbnail):hover > .thumbnail_description {
+    opacity: 100%;
+    transform: translateY(0px);
+    filter: initial;
+}
+
+.mainimage {
+    width: 90%;
+}
+
 @media (max-device-width: 700px) {
     .mobile1 {
         top: calc(9% + 400px) !important;
@@ -219,5 +258,8 @@ a:has(.thumbnail) {
     .linkmenu {
         opacity: 1;
         transform: translateY(0);
+    }
+    .mainimage {
+        width: 600px;
     }
 }
