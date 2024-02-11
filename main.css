@@ -21,6 +21,7 @@ body {
     border-top: 0;
     border-left: 0;
     border-right: 0;
+    top: 0;
 }
 
 .linkmenu {
@@ -69,6 +70,18 @@ body {
     color: cyan;
 }
 
+.sparkling {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0 0 0 0;
+    background-color: rgb(200, 200, 225);
+    mix-blend-mode: overlay;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
 @keyframes maintransion {
     from {
         opacity: 0;
@@ -98,6 +111,15 @@ body {
     }
 }
 
+@keyframes clippingInHorizontal {
+    from {
+        transform: translateX(-200%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
 .transion_main {
     animation-name: maintransion;
     animation-timing-function: cubic-bezier(1, 0, 0, 1);
@@ -105,6 +127,34 @@ body {
     animation-fill-mode: both;
     animation-iteration-count: 1;
     animation-direction: normal;
+}
+
+.transion_clippingHorizontal {
+    animation-name: clippingInHorizontal;
+    animation-timing-function: cubic-bezier(1, 0, 0, 1);
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-delay: 1s;
+}
+
+.kuronuri {
+    width: max-content;
+    height: auto;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    font-size: 1em;
+    display: inline;
+    overflow-wrap: anywhere;
+}
+* > .kuronuri {
+    overflow-wrap: anywhere;
+}
+.kuronuri::selection {
+    color: white;
+    background-color: white;
 }
 
 .transion_rotate {
@@ -261,5 +311,11 @@ a:has(.thumbnail):hover > .thumbnail_description {
     }
     .mainimage {
         width: 600px;
+    }
+    body {
+        width: 100vw !important;
+    }
+    .kuronuri {
+        display: none;
     }
 }

@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>さしみ。</title>
+        <title>便利計算</title>
         <style>
             form {
                 border: 1px solid gray;
@@ -16,6 +16,11 @@
             BPM計算<br>
             BPM <input name="BPM1" value="120" placeholder="BPM" oninput="updateBC();"> の<input name="NBunbo1" placeholder="n" value="4" oninput="updateBC();">分の<input name="NBunsi1" placeholder="m" value="1" oninput="updateBC();">音符 * HS <input name="HS1" value="1" placeholder="HS" oninput="updateBC();"> =<br>
             BPM <input name="BPM2" value="120" placeholder="BPM" oninput="selectionBC = 0; updateBC();"> の<input name="NBunbo2" placeholder="n" value="4" oninput="selectionBC = 1; updateBC();">分の<input name="NBunsi2" placeholder="m" value="1" oninput="selectionBC = 1; updateBC();">音符 * HS <input name="HS2" value="1" placeholder="HS" oninput="selectionBC = 2; updateBC();">
+        </form><br>
+        <form name="SF">
+            なめらかスクロール<br>
+            開始 <input name="SCROLL1" value="1" placeholder="HS" oninput="updateScrollFunc();"> 増加分 <input name="SCROLL2" value="0.01" placeholder="HS_Diff" oninput="updateScrollFunc();"> 回数 <input type="number" name="COUNT" value="16" oninput="updateScrollFunc();"><br>
+            <textarea wrap="soft" name="Output"></textarea>
         </form>
         <script>
             var selectionBC = 0; // (0: BPM固定、 1: 音符間隔固定、 2: HS固定)
@@ -62,7 +67,21 @@
                         break;
                 }
             }
+
+            function updateScrollFunc() {
+                var scroll_init = Number(document.SF.SCROLL1.value);
+                var scroll_diff = Number(document.SF.SCROLL2.value);
+                var count = Number(document.SF.COUNT.value);
+                var scr = scroll_init;
+                var output = "";
+                for (var i = 0;i < count;i++) {
+                    output += scr + ", ";
+                    scr += i * scroll_diff;
+                }
+                document.SF.Output.value = output;
+            }
             updateBC();
+            updateScrollFunc();
         </script>
     </body>
 </html>
