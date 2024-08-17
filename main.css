@@ -26,7 +26,7 @@ body {
 
 .linkmenu {
     position: absolute;
-    top: calc(9% + 50px);
+    top: 50%;
     background-color: #444444;
     border: 1px cyan solid;
     width: 50%;
@@ -42,7 +42,6 @@ body {
 
 .linkmenu:hover {
     opacity: 1;
-    transform: translateY(0);
 }
 
 .linkmenu > * {
@@ -231,7 +230,7 @@ a:has(.thumbnail) {
 
 .thumbnail_panel {
     padding-left: 10px;
-    grid: 130px / auto-flow 220px;
+    grid: auto-flow 130px / repeat(auto-fill, 220px);
     display: grid;
 }
 
@@ -307,7 +306,6 @@ a:has(.thumbnail):hover > .thumbnail_description {
     }
     .linkmenu {
         opacity: 1;
-        transform: translateY(0);
     }
     .mainimage {
         width: 600px;

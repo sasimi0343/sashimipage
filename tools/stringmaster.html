@@ -1,0 +1,190 @@
+<html>
+    <head>
+        <title>便利文字列</title>
+        <style>
+            form {
+                border: 1px solid gray;
+            }
+            .selected {
+                background-color: rgb(150, 0, 0);
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <form name="Kaibun">
+            簡易回文生成機<br>
+            <textarea name="text" placeholder="しんぶんし" rows="14" cols="80" oninput="Kaibun_Update(false);"></textarea><br>
+            <textarea name="txet" placeholder="しんぶんし" rows="14" cols="80" oninput="Kaibun_Update(true);"></textarea>
+        </form><br>
+        <form name="Count">
+            文字数カウント<br>
+            <textarea name="text" placeholder="しんぶんし" rows="14" cols="80" oninput="Count_Update();"></textarea><br>
+            <input type="text" name="counter" placeholder="5" readonly></input>
+        </form>
+        <form name="KeyBoxStorialize">
+            KeyBox互換のストーリーLua化<br>
+            <input type="text" name="prefix" placeholder="mes.1" oninput="KBStory_Update();"></input><br>
+            <textarea name="text" placeholder="KeyBoxer「...」" rows="14" cols="80" oninput="KBStory_Update();"></textarea><br>
+            <textarea name="lua" style="width: 80%; height: 200px;" placeholder='["mes.1.1"] = "...",' readonly></textarea><br>
+            <textarea name="lua2" style="width: 80%; height: 200px;" placeholder='keybox.message(language.get("story.mes.1.1"), "KeyBoxer")' readonly></textarea>
+        </form>
+        <form name="ImageToText" style="overflow: scroll; height: 300px;">
+            ImageToText
+            <input type="text" name="text" placeholder="text" oninput="ImgToText_Update();"></input><br>
+            <input type="range" name="size" max="99" min="10" onchange="ImgToText_Update();"></input>
+            <input type="text" name="bright" placeholder="■" value="■" oninput="ImgToText_Update();"></input>
+            <input type="text" name="dark" placeholder="□" value="□" oninput="ImgToText_Update();"></input><br>
+            <canvas width="100" height="100" id="imgtotext_canvas"></canvas>
+            <canvas width="100" height="100" id="imgtotext_canvas_2"></canvas>
+            <textarea name="output" readonly></textarea><br>
+        </form>
+        <script>
+            function Kaibun_Update(isBtoA) {
+                var kb = document.Kaibun;
+                if (isBtoA) {
+                    var txet = kb.txet.value;
+                    var text = "";
+                    for (var i = txet.length-1;i >= 0;i--) {
+                        text += txet.charAt(i);
+                    }
+                    kb.text.value = text;
+                }else{
+                    var text = kb.text.value;
+                    var txet = "";
+                    for (var i = text.length-1;i >= 0;i--) {
+                        txet += text.charAt(i);
+                    }
+                    kb.txet.value = txet;
+                }
+
+            }
+
+            function Count_Update() {
+                var ct = document.Count;
+                ct.counter.value = ct.text.value.replace(/\s/, "").length;
+            }
+
+            function KBStory_Update() {
+                var kbs = document.KeyBoxStorialize;
+                var str = kbs.text.value;
+                var prefix = kbs.prefix.value;
+
+                var lines = str.split("\n");
+                var kansei = "";
+                var kansei2 = "";
+                var index = 0;
+                var prevchname = "";
+                for (var i = 0;i < lines.length;i++) {
+                    if (lines[i] == "" || lines[i].charAt(0) == "(") {
+                        continue;
+                    }
+                    index++;
+                    kansei += "[\"" + prefix + "." + index + "\"] = \"";
+                    kansei2 += "keybox.message(language.get(\"story." + prefix + "." + index + "\"), \"";
+                    var s = lines[i];
+                    var kakko = 0;
+                    var itizi = "";
+                    var mes = "";
+                    var chname = "";
+                    for (var l = 0;l < s.length;l++) {
+                        var c = s.charAt(l);
+                        if (c == "「") {
+                            kakko++;
+                            if (chname == "" && itizi != "") {
+                                chname = itizi;
+                            }else if (chname == "") {
+                                chname = prevchname;
+                            }
+                            itizi = "";
+                        }else if (c == "」") {
+                            kakko--;
+                            if (kakko == 0) {
+                                mes = itizi;
+                            }
+                            itizi = "";
+                        }else{
+                            itizi += c;
+                        }
+                    }
+
+                    kansei += mes + "\",\n";
+                    kansei2 += chname + "\")\n";
+                    prevchname = chname;
+                }
+
+                kbs.lua.value = kansei;
+                kbs.lua2.value = kansei2;
+            }
+            var cv_imgtotext = document.getElementById("imgtotext_canvas");
+            var ct_imgtotext = cv_imgtotext.getContext("2d");
+            function ImgToText_Update() {
+                var cv = cv_imgtotext;
+                var ct = ct_imgtotext;
+                
+                var cv2 = document.getElementById("imgtotext_canvas_2");
+                var ct2 = cv2.getContext("2d");
+
+                var text = document.ImageToText.text.value;
+                var size = document.ImageToText.size.value;
+                var bright = document.ImageToText.bright.value;
+                var dark = document.ImageToText.dark.value;
+                ct.font = size + "pt Arial";
+
+                var width = 0;
+                var height = 0;
+
+                ct.fillStyle = "#ffffff";
+                ct.fillRect(0, 0, cv.width, cv.height);
+
+                for (var i = 0;i < text.length;i++) {
+                    var c = text.charAt(i);
+                    var me = ct.measureText(c);
+                    width = Math.max(width, me.width);
+                    height += me.actualBoundingBoxAscent;
+                }
+                cv.width = width;
+                cv.height = height + 10;
+                cv2.width = width;
+                cv2.height = height + 10;
+
+                height = 0;
+                ct.fillStyle = "#000000";
+                ct.font = size + "pt Arial";
+                for (var i = 0;i < text.length;i++) {
+                    var c = text.charAt(i);
+                    var me = ct.measureText(c);
+                    height += me.actualBoundingBoxAscent;
+                    ct.fillText(c, 0, height);
+                }
+                var perfection = 8;
+                var img = ct.getImageData(0, 0, cv.width, cv.height);
+                var img2 = ct.createImageData(Math.ceil(cv.width / perfection), Math.ceil(cv.height / perfection));
+                var kansei = "";
+                for (var y = 0; y < img2.height; y++) {
+                    for (var x = 0; x < img2.width; x++) {
+                        var img_index = ((y * perfection) * img.width + (x * perfection)) * 4;
+                        var img2_index = (y * img2.width + x) * 4;
+                        img2.data[img2_index + 0] = img.data[img_index + 0];
+                        img2.data[img2_index + 1] = img.data[img_index + 1];
+                        img2.data[img2_index + 2] = img.data[img_index + 2];
+                        img2.data[img2_index + 3] = img.data[img_index + 3];
+
+                        if (img2.data[img2_index + 3] < 128) {
+                            kansei += bright;
+                        }else{
+                            kansei += dark;
+                        }
+                    }
+                    kansei += "\n";
+                }
+
+                document.ImageToText.output.value = kansei;
+
+                ct2.putImageData(img2, 0, 0);
+
+
+            }
+        </script>
+    </body>
+</html>
