@@ -91,18 +91,27 @@
                         var c = s.charAt(l);
                         if (c == "「") {
                             kakko++;
-                            if (chname == "" && itizi != "") {
-                                chname = itizi;
-                            }else if (chname == "") {
-                                chname = prevchname;
+                            if (kakko <= 1) 
+                            {
+                                if (chname == "" && itizi != "") {
+                                    chname = itizi;
+                                }else if (chname == "") {
+                                    chname = prevchname;
+                                }
+                                itizi = "";
+                            }else{
+                                itizi += c;
                             }
-                            itizi = "";
                         }else if (c == "」") {
                             kakko--;
-                            if (kakko == 0) {
-                                mes = itizi;
+                            if (kakko <= 0) {
+                                if (kakko == 0) {
+                                    mes = itizi;
+                                }
+                                itizi = "";
+                            }else{
+                                itizi += c;
                             }
-                            itizi = "";
                         }else{
                             itizi += c;
                         }
