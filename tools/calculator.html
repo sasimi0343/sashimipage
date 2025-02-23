@@ -22,6 +22,11 @@
             開始 <input name="SCROLL1" value="1" placeholder="HS" oninput="updateScrollFunc();"> 増加分 <input name="SCROLL2" value="0.01" placeholder="HS_Diff" oninput="updateScrollFunc();"> 回数 <input type="number" name="COUNT" value="16" oninput="updateScrollFunc();"><br>
             <textarea wrap="soft" name="Output"></textarea>
         </form>
+        <form name="KK">
+            仮説検定(二項分布) (有意水準5%) (両側検定)<br>
+            確率 <input name="PER" type="number" value="50" oninput="updateKK();" value="50%">% 試行回数<input type="number" name="ATTEMPT" value="100" oninput="updateKK();"> 当たった回数 <input type="number" name="COUNT" value="1" oninput="updateKK();"><br>
+            結果: <input name="RESULT" placeholder="結果" disabled> <button type="button" onclick="document.KK.ATTEMPT.value++; document.KK.COUNT.value++; updateKK();">当てた</button><button type="button" onclick="document.KK.ATTEMPT.value++; updateKK();">外した</button>
+        </form>
         <script>
             var selectionBC = 0; // (0: BPM固定、 1: 音符間隔固定、 2: HS固定)
             function GetScroll(bpm1, bpm2, scroll1) {
@@ -80,8 +85,29 @@
                 }
                 document.SF.Output.value = output;
             }
+
+            function updateKK() {
+                var percentage = Number(document.KK.PER.value) / 100;
+                var attempt = Number(document.KK.ATTEMPT.value);
+                var count = Number(document.KK.COUNT.value);
+
+                var m = percentage * attempt;
+                var sigma = Math.sqrt(percentage * attempt * (1-percentage));
+
+                function z(x) {
+                    return (x - m) / sigma;
+                }
+                var sui = z(count);
+                if (sui < 0) {
+                    document.KK.RESULT.value = sui + (sui < -1.96 ? " <= " : " > ") + "-1.96";
+                }else{
+                    document.KK.RESULT.value = sui + (sui > 1.96 ? " >= " : " < ") + "1.96";
+                }
+            }
+
             updateBC();
             updateScrollFunc();
+            updateKK();
         </script>
     </body>
 </html>
