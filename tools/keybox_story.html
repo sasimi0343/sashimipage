@@ -1,0 +1,173 @@
+<html>
+    <head>
+        <title>便利文字列</title>
+        <style>
+            * {
+                color: white;
+                font-family: 'PixelMPlus', Arial;
+                word-spacing: 8px;
+            }
+            body {
+                background-color: #22222a;
+            }
+            input, textarea, button, select {
+                background-color: #444444;
+                border: 1px gray solid;
+                margin-top: 4px;
+            }
+            form, div {
+                border: 1px solid gray;
+                padding: 8px;
+            }
+            .selected {
+                background-color: rgb(150, 0, 0);
+                color: white;
+            }
+            .serif {
+                background-color: #444444;
+                padding: 8px;
+            }
+            .serif:not(:has(span)) {
+                background-color: #555555;
+            }
+            .serif > span {
+                background-color: #555555;
+            }
+            .serif > div {
+                margin-left: 16px;
+                padding: 0px;
+                border: none;
+            }
+        </style>
+    </head>
+    <body>
+        <form name="KeyBoxStorialize">
+            KeyBox互換のストーリーLua化<br>
+            <input type="text" name="prefix" placeholder="mes.1" oninput="KBStory_Update();"></input><br>
+            <textarea name="text" placeholder="KeyBoxer「...」" rows="14" cols="80" oninput="KBStory_Update();"></textarea><br>
+            <textarea name="lua" style="width: 80%; height: 200px;" placeholder='["mes.1.1"] = "...",' readonly></textarea><br>
+            <textarea name="lua2" style="width: 80%; height: 200px;" placeholder='keybox.message(language.get("story.mes.1.1"), "KeyBoxer")' readonly></textarea><br>
+            Filter: <input type="text" name="filter" onchange="Serif_Update();"> <select id="character_list" onchange="Serif_Update();"></select>
+            <div id="serif_list">
+                <div class="serif" style="display: none;" id="serif_temp">
+                    <span>名前</span>
+                    <div>文章です。</div>
+                </div>
+            </div>
+        </form>
+        <script>
+            function localizedName(japanese, key) {
+                return {key: key, japanese: japanese}
+            }
+
+            const characterLocalization = [
+                localizedName("グローデン", "story.character.groaden"),
+                localizedName("タネル", "story.character.tanel"),
+                localizedName("メデン", "story.character.meden"),
+                localizedName("アンプレル", "story.character.amprel"),
+                localizedName("レクラン", "story.character.reklan"),
+                localizedName("ディアル", "story.character.dial"),
+                localizedName("ロイマフ", "story.character.roimaf"),
+                localizedName("マーク", "story.character.maak"),
+                localizedName("アルキマ", "story.character.alkima"),
+            ];
+
+            var kbs = document.KeyBoxStorialize;
+            var characters = [];
+            function Serif_Update() {
+                var filter_mes = kbs.filter.value;
+                var filter_character = document.getElementById("character_list");
+                var filter = (mes, chname) => {
+                    if (filter_character.selectedIndex != 0 && characters[filter_character.selectedIndex-1] != chname) return false;
+                    if (filter_mes != "" && !mes.includes(filter_mes)) return false;
+                    return true;
+                };
+                var serif_list = document.getElementById("serif_list");
+                for (var i in serif_list.childNodes) {
+                    var serif = serif_list.childNodes[i];
+                    if (serif.nodeName != "DIV" || serif.querySelector("span") == null) {
+                        continue;
+                    }
+                    var chname = serif.querySelector("span").innerHTML;
+                    var mes = serif.querySelector("div").innerHTML;
+                    serif.style.display = (filter(mes, chname) ? "block" : "none");
+                }
+            }
+            function KBStory_Update() {
+                var str = kbs.text.value;
+                var prefix = kbs.prefix.value;
+
+                var lines = str.split("\n");
+                var kansei = "";
+                var kansei2 = "";
+                var index = 0;
+                var prevchname = "";
+                var serif_list = document.getElementById("serif_list");
+                var character_list = document.getElementById("character_list");
+                var serif_list_kansei = "";
+                var character_list_kansei = "<option>全員</option>";
+                characters = [];
+                for (var i = 0;i < lines.length;i++) {
+                    if (lines[i] == "" || lines[i].charAt(0) == "(") {
+                        continue;
+                    }
+                    index++;
+                    kansei += "[\"" + prefix + "." + index + "\"] = \"";
+                    kansei2 += "keybox.message(\"#story." + prefix + "." + index + "\", \"";
+                    var s = lines[i];
+                    var kakko = 0;
+                    var itizi = "";
+                    var mes = "";
+                    var chname = "";
+                    var nokakko = true;
+                    for (var l = 0;l < s.length;l++) {
+                        var c = s.charAt(l);
+                        if (c == "「") {
+                            kakko++;
+                            nokakko = false;
+                            if (kakko <= 1) 
+                            {
+                                if (chname == "" && itizi != "") {
+                                    chname = itizi;
+                                }else if (chname == "") {
+                                    chname = prevchname;
+                                }
+                                itizi = "";
+                            }else{
+                                itizi += c;
+                            }
+                        }else if (c == "」") {
+                            kakko--;
+                            if (kakko <= 0) {
+                                if (kakko == 0) {
+                                    mes = itizi;
+                                }
+                                itizi = "";
+                            }else{
+                                itizi += c;
+                            }
+                        }else{
+                            itizi += c;
+                        }
+                    }
+                    if (nokakko) serif_list_kansei += "<div class=\"serif\">" + itizi + "</div>"; else serif_list_kansei += "<div class=\"serif\"><span>" + chname + "</span><div>" + mes + "</div></div>";
+                    
+                    if (!characters.includes(chname) && chname != "") characters.push(chname);
+                    kansei += mes + "\",\n";
+                    let localIndex = characterLocalization.findIndex((a) => a.japanese == chname);
+                    if (localIndex != -1) {
+                        kansei2 += "#" + characterLocalization[localIndex].key + "\")\n";
+                    }else{
+                        kansei2 += chname + "\")\n";
+                    }
+                    prevchname = chname;
+                }
+                for (var i in characters) {character_list_kansei += "<option>" + characters[i] + "</option>";}
+                character_list.innerHTML = character_list_kansei;
+                serif_list.innerHTML = serif_list_kansei;
+                kbs.lua.value = kansei;
+                kbs.lua2.value = kansei2;
+            }
+        </script>
+    </body>
+</html>

@@ -9,6 +9,9 @@
                 background-color: rgb(150, 0, 0);
                 color: white;
             }
+            input[disabled] {
+                width: 300px;
+            }
         </style>
     </head>
     <body>
@@ -25,7 +28,8 @@
         <form name="KK">
             仮説検定(二項分布) (有意水準5%) (両側検定)<br>
             確率 <input name="PER" type="number" value="50" oninput="updateKK();" value="50%">% 試行回数<input type="number" name="ATTEMPT" value="100" oninput="updateKK();"> 当たった回数 <input type="number" name="COUNT" value="1" oninput="updateKK();"><br>
-            結果: <input name="RESULT" placeholder="結果" disabled> <button type="button" onclick="document.KK.ATTEMPT.value++; document.KK.COUNT.value++; updateKK();">当てた</button><button type="button" onclick="document.KK.ATTEMPT.value++; updateKK();">外した</button>
+            結果: <input name="RESULT" placeholder="結果" disabled> <button type="button" onclick="document.KK.ATTEMPT.value++; document.KK.COUNT.value++; updateKK();">当てた</button><button type="button" onclick="document.KK.ATTEMPT.value++; updateKK();">外した</button><br>
+            信頼区間: <input name="TRUSTRANGE" disabled>
         </form>
         <script>
             var selectionBC = 0; // (0: BPM固定、 1: 音符間隔固定、 2: HS固定)
@@ -103,6 +107,10 @@
                 }else{
                     document.KK.RESULT.value = sui + (sui > 1.96 ? " >= " : " < ") + "1.96";
                 }
+
+                var tr1 = m - (1.96 * sigma)
+                var tr2 = m + (1.96 * sigma)
+                document.KK.TRUSTRANGE.value = "[" + tr1 + ", " + tr2 + "]";
             }
 
             updateBC();

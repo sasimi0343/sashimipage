@@ -22,12 +22,13 @@
             <textarea name="text" placeholder="しんぶんし" rows="14" cols="80" oninput="Count_Update();"></textarea><br>
             <input type="text" name="counter" placeholder="5" readonly></input>
         </form>
-        <form name="KeyBoxStorialize">
-            KeyBox互換のストーリーLua化<br>
-            <input type="text" name="prefix" placeholder="mes.1" oninput="KBStory_Update();"></input><br>
-            <textarea name="text" placeholder="KeyBoxer「...」" rows="14" cols="80" oninput="KBStory_Update();"></textarea><br>
-            <textarea name="lua" style="width: 80%; height: 200px;" placeholder='["mes.1.1"] = "...",' readonly></textarea><br>
-            <textarea name="lua2" style="width: 80%; height: 200px;" placeholder='keybox.message(language.get("story.mes.1.1"), "KeyBoxer")' readonly></textarea>
+        <form name="BoxText">
+            <input type="text" name="text" placeholder="text" oninput="BoxText_Update();"></input>
+            <textarea name="output" placeholder="" rows="10" cols="80"readonly></textarea><br>
+        </form>
+        <form name="RandomText">
+            <input type="text" name="output" placeholder="text" readonly></input>
+            <button type="button" onclick="RandomText_Update();">Random</button>
         </form>
         <form name="ImageToText" style="overflow: scroll; height: 300px;">
             ImageToText
@@ -40,6 +41,7 @@
             <textarea name="output" readonly></textarea><br>
         </form>
         <script>
+            const randomChar = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
             function Kaibun_Update(isBtoA) {
                 var kb = document.Kaibun;
                 if (isBtoA) {
@@ -59,71 +61,26 @@
                 }
 
             }
-
+            function BoxText_Update() {
+                var bt = document.BoxText;
+                var kansei = "";
+                for (var i = 0;i < bt.text.value.length;i++) {
+                    kansei += "#BoxText \"" + bt.text.value.charAt(i) + "\"\n";
+                }
+                bt.output.value = kansei;
+            }
+            function RandomText_Update() {
+                var rt = document.RandomText;
+                var kansei = "";
+                for (var i = 0;i < 16;i++) {
+                    var char = randomChar.charAt(Math.floor(Math.random() * randomChar.length));
+                    kansei += char;
+                }
+                rt.output.value = kansei;
+            }
             function Count_Update() {
                 var ct = document.Count;
                 ct.counter.value = ct.text.value.replace(/\s/, "").length;
-            }
-
-            function KBStory_Update() {
-                var kbs = document.KeyBoxStorialize;
-                var str = kbs.text.value;
-                var prefix = kbs.prefix.value;
-
-                var lines = str.split("\n");
-                var kansei = "";
-                var kansei2 = "";
-                var index = 0;
-                var prevchname = "";
-                for (var i = 0;i < lines.length;i++) {
-                    if (lines[i] == "" || lines[i].charAt(0) == "(") {
-                        continue;
-                    }
-                    index++;
-                    kansei += "[\"" + prefix + "." + index + "\"] = \"";
-                    kansei2 += "keybox.message(language.get(\"story." + prefix + "." + index + "\"), \"";
-                    var s = lines[i];
-                    var kakko = 0;
-                    var itizi = "";
-                    var mes = "";
-                    var chname = "";
-                    for (var l = 0;l < s.length;l++) {
-                        var c = s.charAt(l);
-                        if (c == "「") {
-                            kakko++;
-                            if (kakko <= 1) 
-                            {
-                                if (chname == "" && itizi != "") {
-                                    chname = itizi;
-                                }else if (chname == "") {
-                                    chname = prevchname;
-                                }
-                                itizi = "";
-                            }else{
-                                itizi += c;
-                            }
-                        }else if (c == "」") {
-                            kakko--;
-                            if (kakko <= 0) {
-                                if (kakko == 0) {
-                                    mes = itizi;
-                                }
-                                itizi = "";
-                            }else{
-                                itizi += c;
-                            }
-                        }else{
-                            itizi += c;
-                        }
-                    }
-
-                    kansei += mes + "\",\n";
-                    kansei2 += chname + "\")\n";
-                    prevchname = chname;
-                }
-
-                kbs.lua.value = kansei;
-                kbs.lua2.value = kansei2;
             }
             var cv_imgtotext = document.getElementById("imgtotext_canvas");
             var ct_imgtotext = cv_imgtotext.getContext("2d");
