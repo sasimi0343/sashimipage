@@ -55,6 +55,21 @@
                 </div>
             </div>
         </form>
+        <div>
+            <div>keybox.playKBM("曲ID")</div>
+            <div>keybox.playInWalkmode(距離)</div>
+            
+            <div>keybox.playInBattleMode("keyboxer", {{
+        HP = 30000,
+        Armor = 100,
+        Defence = 50,
+        Regen = 100,
+        Position = 50,
+        attacks = {{Strength = 100, CriticalPercentage = 1, Velocity = 100, Frequency = 200}, {Strength = 300, CriticalPercentage = 5, Velocity = 300, Frequency = 72}}
+        }})</div>
+            
+            <div>&lt;type speed=速さ(高い方が遅い)&gt;</div>
+        </div>
         <script>
             function localizedName(japanese, key) {
                 return {key: key, japanese: japanese}
@@ -70,6 +85,9 @@
                 localizedName("ロイマフ", "story.character.roimaf"),
                 localizedName("マーク", "story.character.maak"),
                 localizedName("アルキマ", "story.character.alkima"),
+                
+                localizedName("ツノート", "story.character.tsnote"),
+                localizedName("キロツノート", "story.character.killotsnote"),
             ];
 
             var kbs = document.KeyBoxStorialize;
@@ -109,6 +127,7 @@
                 characters = [];
                 for (var i = 0;i < lines.length;i++) {
                     if (lines[i] == "" || lines[i].charAt(0) == "(") {
+                        kansei2 += "--" + lines[i] + "\n";
                         continue;
                     }
                     index++;

@@ -285,6 +285,10 @@ a:has(.thumbnail):hover > .thumbnail_description {
     width: 90%;
 }
 
+.sentencefont {
+    font-family: 'HGP創英角ｺﾞｼｯｸUB', Arial;
+}
+
 @media (max-device-width: 700px) {
     .mobile1 {
         top: calc(9% + 400px) !important;

@@ -31,6 +31,12 @@
             結果: <input name="RESULT" placeholder="結果" disabled> <button type="button" onclick="document.KK.ATTEMPT.value++; document.KK.COUNT.value++; updateKK();">当てた</button><button type="button" onclick="document.KK.ATTEMPT.value++; updateKK();">外した</button><br>
             信頼区間: <input name="TRUSTRANGE" disabled>
         </form>
+        <form name="TP">
+            aのk乗の下n桁の数字の規則性<br>
+            a <input name="value_A" min="1" max="999999" type="number" value="2" oninput="updateTP();"> n <input type="number" min="1" max="999" name="value_N" value="1" oninput="updateTP();">
+            試行回数: <input type="number" name="value_Attempt" value="30" oninput="updateTP();">
+            結果: <textarea wrap="soft" name="value_Result"></textarea>
+        </form>
         <script>
             var selectionBC = 0; // (0: BPM固定、 1: 音符間隔固定、 2: HS固定)
             function GetScroll(bpm1, bpm2, scroll1) {
@@ -111,6 +117,42 @@
                 var tr1 = m - (1.96 * sigma)
                 var tr2 = m + (1.96 * sigma)
                 document.KK.TRUSTRANGE.value = "[" + tr1 + ", " + tr2 + "]";
+            }
+
+            function updateTP() {
+                var a = Number(document.TP.value_A.value);
+                var n = Number(document.TP.value_N.value);
+                var attempt = Number(document.TP.value_Attempt.value);
+                
+                var nums = [a];
+                var attempts = 0;
+                var lastnum = -1;
+                for (var k = 0;k < attempt;k++) {
+                    var num = (nums[k] * a) % Math.pow(10, n);
+                    attempts = k+1;
+                    if (nums.indexOf(num) != -1) {
+                        lastnum = num;
+                        break;
+                    }else{
+                        nums.push(num);
+                    }
+                }
+                var kansei = "";
+                
+                for (var i in nums) {
+                    if (lastnum == nums[i]) kansei += "[";
+                    kansei += nums[i] + ",";
+                }
+                
+                if (lastnum == -1) {
+                    kansei += "(未だ見つからず)";
+                }else{
+                    kansei = kansei.substr(0, kansei.length-1) + "]";
+                }
+
+                kansei += "(試行回数:" + attempts + ")";
+
+                document.TP.value_Result.value = kansei;
             }
 
             updateBC();
